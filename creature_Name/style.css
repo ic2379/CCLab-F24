@@ -1,0 +1,25 @@
+body{
+    background-color: wheat;
+    text-decoration-color: darkblue;
+
+    font-family:Georgia;
+}
+
+p{
+    text-decoration-color: darkblue;
+}
+
+ul{
+    font-weight: bold;
+}
+
+/* selects all elements of class special highlight */
+.special-highlight{
+    font-size:large;
+    background-color: yellowgreen;
+}
+
+/* created a class and included one word */
+.darkness{
+    background-color: black;
+}
