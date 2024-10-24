@@ -12,7 +12,10 @@ let dragInfluenceY = 0;
 
 let triggerExit2D = false;
 
-let counter = 15;
+let pullCounter = 0; // Counter for rapid pulls
+let speedThreshold = 130;
+
+// let counter = 15;
 
 function setup() {
   // createCanvas(800, 500);
@@ -30,7 +33,7 @@ function draw() {
   let squareSize = width / cols; // auto calculate the size of each square
 
   if (triggerExit2D) {
-    // Center the background
+    // center the background
     translate((width - (width * scaleFactor)) / 2, (height - (height * scaleFactor)) / 2);
     scale(scaleFactor); // Scale down the background
   }
@@ -125,6 +128,20 @@ function draw() {
       stroke(235, 52, 177);
       line(mouseX-120, mouseY-30, x+120, y+30);  // leash
     pop();
+    
+    // count each time drag speed goes above speed threshold
+    let dragSpeed = dist(pmouseX, pmouseY, mouseX, mouseY);
+    if (dragSpeed > speedThreshold) {
+      pullCounter++; 
+    }
+    
+    // condition for changing the background ("exiting 2D")
+    if (pullCounter >= 15) {
+      triggerExit2D = true;
+    }
+    
+    console.log("pull counter" + pullCounter);
+    
   }
    
   // replaced the white circle with the bear
@@ -139,16 +156,13 @@ function draw() {
   y = lerp(y, followInfluenceY + dragInfluenceY, 0.5);
   
   
+  // putting toggleBackground(); here gives cool double/transparent effect (doesn't show up well on screen recording)
   // if (counter == 15) {
   // toggleBackground();
   
   
 // }
   
-}
-
-function toggleBackground() {
-  triggerExit2D = !triggerExit2D;
 }
 
 // When the user presses the mouse, we check if they're dragging the white circle
@@ -173,7 +187,7 @@ function mouseReleased() {
 
 }
 
-// pixel bear
+// ----------------------pixel bear drawing part ----------------------
 function drawBear(x, y) {
   
   translate(x, y);  // Move the entire shape to (x, y)
@@ -311,10 +325,4 @@ function drawBear(x, y) {
     // tail
     line(x+30, y+30, x+30, y+30);
   pop();
-}
-
-if (counter == 15) {
-  toggleBackground();
-  
-  
 }
