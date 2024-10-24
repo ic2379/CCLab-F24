@@ -7,8 +7,12 @@ let targetXSpeed = 3;
 let targetYSpeed = 1.5;
 
 let isDragging = false;
-let dragInfluenceX = 0;  // Influence from the drag
+let dragInfluenceX = 0;  // influence from the drag
 let dragInfluenceY = 0;
+
+let triggerExit2D = false;
+
+let counter = 15;
 
 function setup() {
   // createCanvas(800, 500);
@@ -19,10 +23,18 @@ function setup() {
 
 function draw() {
   
+  let scaleFactor = 0.6 // factor by which the background will scale down
+  
   let cols = 16;
   let rows = Math.floor(height / (width/cols));
   let squareSize = width / cols; // auto calculate the size of each square
 
+  if (triggerExit2D) {
+    // Center the background
+    translate((width - (width * scaleFactor)) / 2, (height - (height * scaleFactor)) / 2);
+    scale(scaleFactor); // Scale down the background
+  }
+  
   for (let y = 0; y<rows; y++) {
     for (let x = 0; x<cols; x++) {
            
@@ -109,6 +121,8 @@ function draw() {
     
     push();
       translate(x,y);
+      strokeWeight(5);
+      stroke(235, 52, 177);
       line(mouseX-120, mouseY-30, x+120, y+30);  // leash
     pop();
   }
@@ -123,6 +137,18 @@ function draw() {
   // Combine influence of dragging (if active) with the influence of the red circle
   x = lerp(x, followInfluenceX + dragInfluenceX, 0.5);
   y = lerp(y, followInfluenceY + dragInfluenceY, 0.5);
+  
+  
+  // if (counter == 15) {
+  // toggleBackground();
+  
+  
+// }
+  
+}
+
+function toggleBackground() {
+  triggerExit2D = !triggerExit2D;
 }
 
 // When the user presses the mouse, we check if they're dragging the white circle
@@ -285,4 +311,10 @@ function drawBear(x, y) {
     // tail
     line(x+30, y+30, x+30, y+30);
   pop();
+}
+
+if (counter == 15) {
+  toggleBackground();
+  
+  
 }
