@@ -25,6 +25,8 @@ function setup() {
 }
 
 function draw() {
+
+  background(255);
   
   let scaleFactor = 0.6 // factor by which the background will scale down
   
