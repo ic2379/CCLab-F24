@@ -10,12 +10,16 @@ let isDragging = false;
 let dragInfluenceX = 0;  // influence from the drag
 let dragInfluenceY = 0;
 
+// condition for the state change from 2D to 3D
 let triggerExit2D = false;
 
 let pullCounter = 0; // Counter for rapid pulls
-let speedThreshold = 130;
+let speedLimit = 130;
 
 // let counter = 15;
+
+let trail = [];
+let maxTrailLength = 50;
 
 function setup() {
   // createCanvas(800, 500);
@@ -25,10 +29,20 @@ function setup() {
 }
 
 function draw() {
-
+  
+  // console.log(mouseX, mouseY);  
+  
+  let lastMillis = millis();
+  
   background(255);
   
-  let scaleFactor = 0.6 // factor by which the background will scale down
+  // lines for the corners of the walls after 4th wall break
+  line(240, 150, 0, 0);
+  line(559, 150, 800, 0);
+  line(240, 350, 0, 500);
+  line(559, 350, 800, 500);
+  
+  let scaleFactor = 0.4 // factor by which the background will scale down
   
   let cols = 16;
   let rows = Math.floor(height / (width/cols));
@@ -37,8 +51,17 @@ function draw() {
   if (triggerExit2D) {
     // center the background
     translate((width - (width * scaleFactor)) / 2, (height - (height * scaleFactor)) / 2);
+    
+    // bear is now constrained to the floor on the 3D space
+    x = constrain(x, 0, 559);
+    y = constrain(y, 350, 500);
+    
     scale(scaleFactor); // Scale down the background
+    
   }
+  
+  
+//--------------------------drawing the background------------------
   
   for (let y = 0; y<rows; y++) {
     for (let x = 0; x<cols; x++) {
@@ -46,7 +69,7 @@ function draw() {
       push();
       noStroke();
       
-        if ((x + y) % 2 == 0) { // if row number + colmn number is even number, the square should be purple
+        if ((x + y) % 2 == 0) { // if row number + colmn number is even, the square should be purple
           fill(190, 66, 237); // purple
         } else {
           fill(160, 158, 255);   // blue
@@ -128,12 +151,12 @@ function draw() {
       translate(x,y);
       strokeWeight(5);
       stroke(235, 52, 177);
-      line(mouseX-120, mouseY-30, x+120, y+30);  // leash
+      line(mouseX - x, mouseY - y, x+120, y+30);  // leash
     pop();
     
     // count each time drag speed goes above speed threshold
     let dragSpeed = dist(pmouseX, pmouseY, mouseX, mouseY);
-    if (dragSpeed > speedThreshold) {
+    if (dragSpeed > speedLimit) {
       pullCounter++; 
     }
     
@@ -157,11 +180,37 @@ function draw() {
   x = lerp(x, followInfluenceX + dragInfluenceX, 0.5);
   y = lerp(y, followInfluenceY + dragInfluenceY, 0.5);
   
+  // x = constrain(x, 0, width - 150);
+  // y = constrain(y, 0, height - 150);
+  
+  // if(triggerExit2D == true)
+  
+    if (millis() - lastMillis > 2) {
+      trail.push({ trailX: x+15, trailY: y+20 });
+    }
+
+    if (trail.length > maxTrailLength) {
+      trail.shift();
+    }
+
+    // Draw the pixel trail
+    for (let i = 0; i < trail.length; i++) {
+      let pos = trail[i];
+
+      noStroke();
+      
+    if(triggerExit2D == true){
+      fill(random(256), random(138), random(210), map(i, 0, trail.length, 0, 255));  // Fade as the trail gets older
+      rect(pos.trailX, pos.trailY, 15, 45);  // Draw small squares (pixels) as the trail
+    } else {
+      fill(255, 138, 210, map(i, 0, trail.length, 0, 255));  // Fade as the trail gets older
+      rect(pos.trailX, pos.trailY, 15, 45);  // Draw small squares (pixels) as the trail
+    }
+    }
   
   // putting toggleBackground(); here gives cool double/transparent effect (doesn't show up well on screen recording)
-  // if (counter == 15) {
-  // toggleBackground();
-  
+//   if (pullCounter == 15) {
+//   triggerExit2D = true;
   
 // }
   
@@ -188,6 +237,14 @@ function mouseReleased() {
   dragInfluenceY = 0;
 
 }
+
+
+
+
+
+
+
+
 
 // ----------------------pixel bear drawing part ----------------------
 function drawBear(x, y) {
