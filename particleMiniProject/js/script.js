@@ -8,7 +8,7 @@
 // grassy field at night; when user interacts with grass, causes fireflies to all fly up
 // fireflies have a trail
 
-let NUM_OF_PARTICLES = 250; // Decide the initial number of particles.
+let NUM_OF_PARTICLES = 300; // Decide the initial number of particles.
 
 let particles = [];
 
@@ -20,11 +20,11 @@ function setup() {
   for (let i = 0; i < NUM_OF_PARTICLES; i++) {
     let x = random(width);
     let y = random(height);
-    particles.push(new Particle(x, y, 4));
+    particles.push(new Particle(x, y));
   }
 
   rectMode(CENTER);
-  colorMode(HSB, 360, 100, 100, 100);
+  colorMode(HSB, 360, 100, 100, 100); // fourth value is for transparency
 
 }
 
@@ -46,10 +46,13 @@ class Particle {
     // properties (variables): particle's characteristics
     this.x = startX;
     this.y = startY;
-    // this.dia = 30;
+    this.originalY = startY;
 
     // this.centerX = 0;
     // this.centerY = 0;
+
+    this.floatSpeed = random(0.01, 0.05);
+    this.floatOffset = random(TWO_PI);
 
     // adjusts the size of each particle
     this.centerW = 3;
@@ -62,7 +65,8 @@ class Particle {
 
     this.numLayers = numLayers;
 
-    this.fadeDelay = 0; // Counter to track when to start fading each layer
+    this.fadeDelay = (0, 300); // Counter to track when to start fading each layer
+    // make random to stagger delay times between particles
     
     this.layerTransparency = Array(this.numLayers + 1).fill(100); // Array to hold transparency for each layer
     this.layerSaturation = Array(this.numLayers + 1).fill(100); // Array to hold saturation for each layer
@@ -75,6 +79,12 @@ class Particle {
   update() {
     
     this.fadeDelay++;
+
+    this.y = this.originalY + sin(frameCount * this.floatSpeed + this.floatOffset) * 20;
+    // the number multiplied at the end makes the sparkles move faster and farther if larger
+
+    // boolean var to see if all particles are in faded state
+    let allFaded = true;
 
     for (let i = 0; i < this.layerTransparency.length; i++) {
     
@@ -91,6 +101,13 @@ class Particle {
         this.layerHue[i] -= 5;
         this.layerHue[i] = max(0, this.layerHue[i]);
       }
+      if (this.layerTransparency[i] > 0) {
+        allFaded = false;
+      }
+    }
+
+    if (allFaded) {
+      this.resetParticle();
     }
   }
 
@@ -121,4 +138,12 @@ class Particle {
 
     pop();
   }
+
+  resetParticle() {
+    this.fadeDelay = random(0, 300);
+    this.layerTransparency.fill(100); 
+    this.layerSaturation.fill(100); 
+    this.layerHue.fill(100);
+  }
+
 }
