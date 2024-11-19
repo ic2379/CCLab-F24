@@ -1,0 +1,23 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+h1{
+  color:rebeccapurple; 
+  font-family: 'Trebuchet MS'; 
+}
+
+.box {
+  /* border-width: 1px; 
+  border-style: solid; 
+  border-color: chartreuse; */
+  border: 1px solid rgb(148, 117, 250);
+  margin: 10px;
+  padding: 10px; 
+  margin-top: 50px;
+}

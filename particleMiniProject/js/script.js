@@ -9,6 +9,7 @@
 // fireflies have a trail
 
 let NUM_OF_PARTICLES = 300; // Decide the initial number of particles.
+// can change this number at any time
 
 let particles = [];
 
@@ -52,7 +53,7 @@ class Particle {
     // this.centerY = 0;
 
     this.floatSpeed = random(0.01, 0.05);
-    this.floatOffset = random(TWO_PI);
+    this.floatOffset = random(TWO_PI); // 2 * pi (full 360 degrees)
 
     // adjusts the size of each particle
     this.centerW = 3;
@@ -72,7 +73,12 @@ class Particle {
     this.layerSaturation = Array(this.numLayers + 1).fill(100); // Array to hold saturation for each layer
     this.layerHue = Array(this.numLayers + 1).fill(100); // Array to hold saturation for each layer
     
-    this.fadeStartTimes = Array.from({ length: this.numLayers + 1 }, (_, i) => i * 20); // Delay for each layer's fade
+    this.fadeStartTimes = Array.from({ length: this.numLayers + 1 }, (_, i) => i * 20); // Delay for each layer's fade 
+
+    // this.fadeStartTimes = new Array(this.numLayers + 1);
+    // for (let i = 0; i < fadeStartTimes.length; i++) {
+    //   fadeStartTimes[i] = i * 20;
+    // }
   
   }
   // methods (functions): particle's behaviors
