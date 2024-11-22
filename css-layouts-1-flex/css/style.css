@@ -7,6 +7,33 @@ canvas {
   display: block;
 }
 
+.main-container{
+  background-color: bisque;
+}
+
+.headline-container{
+  background-color: aquamarine;
+}
+
+.center-container{
+  background-color: chartreuse;
+}
+
+canvas{
+  margin: 5px;
+}
+
+.description-container{
+  display: flex;
+  background-color: coral;
+  justify-content: space-around;
+}
+
+p{
+  background-color: cornflowerblue;
+  margin: 4px;
+}
+
 h1{
   color:rebeccapurple; 
   font-family: 'Trebuchet MS'; 
