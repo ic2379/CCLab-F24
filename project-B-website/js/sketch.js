@@ -31,6 +31,22 @@ function draw() {
   apple.display();
 }
 
+class drawnLine {
+
+  constructor() {
+    this.prevX = pwinMouseX; // previous x
+    this.prevY = pwinMouseY; //previous y
+    this.x = winMouseX; 
+    this.y = winMouseY; 
+  }
+
+  display() {
+    stroke(255); 
+    line(this.prevX, this.prevY, this.x, this.y);
+  }
+
+}
+
 
 class Apple{
   constructor(img){

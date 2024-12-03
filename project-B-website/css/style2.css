@@ -106,21 +106,13 @@
     align-items: center;
     justify-content: space-between;
     border-top: 2px solid #676767;
-    padding-left: 40px;
-    padding: 20px;
+    /* padding-left: 40px;
+    padding: 20px; */
   }
   
   /* start button */
   .start-button {
-
     display: flex;
-
-    background-color: #008000;
-    color: white;
-    font-size: 14px;
-
-    padding: 5px 10px;
-    border: 1px solid #004000;
 
     align-items: center;
     justify-content: center;
@@ -153,4 +145,12 @@
     color: white;
     font-size: 14px;
     white-space: nowrap;
+    margin-right: 20px;
+
+    text-shadow: 1px 1px 2px black;
+
+    background-color: #008000;
+
+    padding: 5px 10px;
+    border: 1px solid #004000;
   }
