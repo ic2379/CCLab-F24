@@ -19,7 +19,7 @@ function setup() {
   let canvas = createCanvas(828, 507);
   canvas.parent("p5-canvas-container");
 
-  background(220, backgroundTransparency);
+  // background(220, backgroundTransparency);
 
   canvas.mousePressed(()=>false);
   // canvas.mousePressed(handleMouseClick);
@@ -27,8 +27,6 @@ function setup() {
 }
 
 function draw() {
-  // background(bg);
-
   if(backgroundTransparency != 0 && 
     pmouseX > 79 && pmouseX < 800 &&
     pmouseY > 70 && pmouseY < 391 &&
@@ -53,17 +51,8 @@ function draw() {
 
     // }
 
-    if (pmouseX > 800 && pmouseX < 822 &&
-      pmouseY > 9 && pmouseY < 29 &&
-      mouseX > 800 && mouseX < 822 &&
-      mouseY > 9 && mouseY < 29 && mouseIsPressed) {
-  
-        canvasClose();
-  
-    }
-
   }
-
+    
   // let s = "("+mouseX+", "+mouseY+")"
   // text(s, 100, 100);
 
@@ -124,7 +113,10 @@ function canvasOpen() {
 
 function canvasClose() {
 
-  backgroundTransparency = 0;
+  // write code for a popup that goes to next step: finish popup & adjusting the drawing
+
+  // backgroundTransparency = 0;
+  // remove();
 
 }
 
@@ -138,4 +130,11 @@ function accessDenied() {
   image(errorWindow, random(height), random(width));
   pop();
 
+}
+function mouseClicked() {
+    if (mouseX > 800 && mouseX < 822 &&
+      mouseY > 8.9 && mouseY < 30 && backgroundTransparency != 0) {
+        canvasClose();
+  
+    }
 }
