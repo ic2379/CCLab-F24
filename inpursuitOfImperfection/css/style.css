@@ -1,8 +1,88 @@
 html, body {
+  /* margin: auto;
+  padding: 20px; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.startBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  height: 100vh;
   margin: 0;
-  padding: 0;
+
 }
 
 canvas {
   display: block;
 }
+
+h1{
+  justify-content: center;
+  color: rgb(32, 23, 0); 
+  font-family: "Lacquer", system-ui;
+  /* background-color: rgb(200, 0, 255); */
+}
+
+/* ------------------------------------start page (index) ----------------------------------------- */
+
+.bigBox {
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.startTitle {
+  color: rgb(32, 23, 0); 
+  font-family: "Lacquer", system-ui;
+}
+
+.imageBox {
+  /* width: fit-content;
+  height: fit-content; */
+  display: flex;
+  /* position: fixed; */
+  justify-content: center;
+  align-items: center;
+  /* flex-direction: column;  */
+ 
+  /* align-content: center; */
+  /* width: 130px;  */
+  /* position: relative;  */
+  /* display: inline-block; */
+  /* height: 100vh; */
+}
+
+
+.imageBox .img-top {
+  /* position: fixed; */
+  display: none;
+  position: absolute; 
+  top: 77px;
+  left: 1px;
+ 
+}
+
+.imageBox:hover .img-top{
+  display: inline;
+  align-content: center;
+}
+
+.lacquer-regular {
+  font-family: "Lacquer", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+

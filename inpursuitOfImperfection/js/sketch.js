@@ -1,43 +1,77 @@
 
+// array storing lines
+var lines = []
+
+var backgroundTransparency = 0;
+
+let bg;
+
+function preload() {
+  bg = loadImage('assets/paintWindow1.png');
+}
 
 function setup() {
-  let canvas = createCanvas(800, 600);
+
+  let canvas = createCanvas(828, 507);
   canvas.parent("p5-canvas-container");
 
-  colorMode(HSB, 360, 100, 100, 100); // fourth value is for transparency
-  
+  background(220, backgroundTransparency);
+
+  canvas.mousePressed(()=>false);
+  canvas.doubleClicked(()=>false);
 }
 
 function draw() {
+  // background(220);
+
+  if(backgroundTransparency != 0) {
+
+    if (mouseIsPressed) {
+      var line = new DrawnLine()
+      lines.push(line); 
+    }
   
-  background(221, 76, 94);
+    for (line of lines) {
+      line.display();
+    }
 
-
+  }
 
 }
 
-// maybe dont need class
-class StartScreen {
+class DrawnLine {
 
-  constructor(){
+  constructor() {
+    this.prevX = pmouseX; // previous mouseX position
+    this.prevY = pmouseY; 
+    this.x = mouseX; 
+    this.y = mouseY; 
+  }
+
+  display() {
+    
+    // fill(0);
+    // circle(mouseX,mouseY,1)
+    push(); 
+
+    // translate(windowWidth/2, windowHeight/2);
+    stroke(0); 
+    line(this.prevX, this.prevY, this.x, this.y); 
+
+    pop();
+  }
+
+  update() {
 
   }
 
-  display(){
-
-    // shapes for drawing background 
-
-    // cursor that follows mouseX, mouseY 
-
-    // MS paint shortcut 
-
-  }
-
-  update(){
-
-    // 
+}
 
 
-  }
+function canvasOpen() {
+
+  // console.log(1);
+  background(bg, backgroundTransparency);
+  backgroundTransparency = 255;
 
 }
