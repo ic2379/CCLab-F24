@@ -11,7 +11,7 @@ let errorWindow;
 function preload() {
   bg = loadImage('assets/paintWindow1.png');
   errorSound = loadSound("assets/errorSound.mp3");
-  errorWindow = loadImage('assets/errorWindow.png')
+  errorWindow = loadImage('assets/blankErrorWindow.png')
 }
 
 function setup() {
@@ -122,18 +122,6 @@ function canvasOpen() {
 
 }
 
-// function handleMouseClick() {
-
-//   if (pmouseX > 800 && pmouseX < 822 &&
-//     pmouseY > 9 && pmouseY < 29 &&
-//     mouseX > 800 && mouseX < 822 &&
-//     mouseY > 9 && mouseY < 29 && mouseIsPressed) {
-
-//       canvasClose();
-
-//   }
-// }
-
 function canvasClose() {
 
   backgroundTransparency = 0;
@@ -146,6 +134,7 @@ function accessDenied() {
 
   push();
   imageMode(CENTER);
+  errorWindow.resize(200, 0);
   image(errorWindow, random(height), random(width));
   pop();
 
