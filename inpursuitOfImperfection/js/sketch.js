@@ -2,6 +2,12 @@
 // array storing lines
 var lines = []
 
+// array storing sensed line segments
+var lineSegments = [];
+
+let cleanupTimer = 45 * 60; // 45 secs
+let cleanupStarted = false;
+
 var backgroundTransparency = 0;
 
 let bg;
@@ -27,6 +33,12 @@ function setup() {
 }
 
 function draw() {
+
+  if (frameCount > cleanupTimer && !cleanupStarted) {
+    adjustStage();
+    cleanupStarted = true;
+  }
+
   if(backgroundTransparency != 0 && 
     pmouseX > 79 && pmouseX < 800 &&
     pmouseY > 70 && pmouseY < 391 &&
@@ -36,25 +48,22 @@ function draw() {
     if (mouseIsPressed) {
       var line = new DrawnLine()
       lines.push(line); 
+
+      detectLineChange();
     }
   
     for (line of lines) {
       line.display();
     }
 
-    // if (pmouseX > 800 && pmouseX < 822 &&
-    //   pmouseY > 9 && pmouseY < 29 &&
-    //   mouseX > 800 && mouseX < 822 &&
-    //   mouseY > 9 && mouseY < 29 && mouseIsPressed) {
-
-    //     backgroundTransparency = 0;
-
-    // }
 
   }
     
   // let s = "("+mouseX+", "+mouseY+")"
   // text(s, 100, 100);
+
+  // background(220);
+  // text(frameCount, 100, 100);
 
 }
 
@@ -65,6 +74,9 @@ class DrawnLine {
     this.prevY = pmouseY; 
     this.x = mouseX; 
     this.y = mouseY; 
+
+    // Calculate the angle of the current line
+    this.angle = atan2(this.y - this.prevY, this.x - this.prevX);
   }
 
   display() {
@@ -74,49 +86,106 @@ class DrawnLine {
     push(); 
 
     // translate(windowWidth/2, windowHeight/2);
-    stroke(0); 
+    stroke(2); 
     line(this.prevX, this.prevY, this.x, this.y); 
 
     pop();
   }
 
-  update() {
+  // update() {
+  //   if (frameCount > 3600) {
 
-  }
+  //     adjustStage();
+  
+  //   }
+
+  // }
 
 }
 
-class paintCanvas {
-  
-  constructor() {
+function detectLineChange() {
+  if (lines.length > 1) {
+    let lastLine = lines[lines.length - 1];
+    let prevLine = lines[lines.length - 2];
 
+    // calculate the angle difference between the last two lines
+    let angleDifference = abs(lastLine.angle - prevLine.angle);
+
+    // normalize the angle difference to be between 0 and PI
+    angleDifference = angleDifference > PI ? TWO_PI - angleDifference : angleDifference;
+
+    // threshold for a significant direction change (adjust as needed)
+    let threshold = radians(45); // 45 degrees
+
+    if (angleDifference > threshold) {
+      lineSegments.push(lastLine);
+    }
   }
-
-  display() {
-
-  }
-
-  update() {
-
-  }
-
 }
 
 
 function canvasOpen() {
 
-  // console.log(1);
+  // console.log(frameCount);
+
   background(bg, backgroundTransparency);
   backgroundTransparency = 255;
 
+  if (mouseX > 800 && mouseX < 822 &&
+    mouseY > 8.9 && mouseY < 30 && backgroundTransparency != 0) {
+
+    adjustStage();
+
+  }
 }
 
-function canvasClose() {
+function adjustStage() {
 
-  // write code for a popup that goes to next step: finish popup & adjusting the drawing
+  // popup that goes to next step: finish popup & adjusting the drawing
 
-  // backgroundTransparency = 0;
-  // remove();
+  // push();
+  // imageMode(CENTER);
+  // errorWindow.resize(200, 0);
+  // image(errorWindow, 100, 100);
+  // pop();
+
+  // 
+
+  // Erase the user's drawing
+  background(bg);
+
+  lines = [];
+
+  // take line segments and adjust them randomly
+  let adjustedSegments = [];
+  for (let i = 0; i < lineSegments.length; i++) {
+    let segment = lineSegments[i];
+    let newX = segment.x + random(-20, 20);
+    let newY = segment.y + random(-20, 20);
+    let newPrevX = segment.prevX + random(-20, 20);
+    let newPrevY = segment.prevY + random(-20, 20);
+
+    // combine lines occasionally
+    if (i > 0 && random() > 0.5) {
+      newPrevX = adjustedSegments[i - 1].x; // connect to the previous segment
+      newPrevY = adjustedSegments[i - 1].y;
+    }
+
+    adjustedSegments.push({
+      prevX: newPrevX,
+      prevY: newPrevY,
+      x: newX,
+      y: newY,
+    });
+  }
+
+  // redraw the adjusted segments
+  for (let segment of adjustedSegments) {
+    push();
+    stroke(0);
+    line(segment.prevX, segment.prevY, segment.x, segment.y);
+    pop();
+  }
 
 }
 
@@ -131,10 +200,60 @@ function accessDenied() {
   pop();
 
 }
+
 function mouseClicked() {
     if (mouseX > 800 && mouseX < 822 &&
       mouseY > 8.9 && mouseY < 30 && backgroundTransparency != 0) {
-        canvasClose();
+        adjustStage();
   
     }
 }
+
+class finalMsg {
+  constructor(message, duration) {
+    this.message = message; // The creepy message
+    this.duration = duration; // How long to display the message (in frames)
+    this.active = false; // Whether the creepy text is currently being displayed
+  }
+
+  start() {
+    this.active = true;
+    this.remainingTime = this.duration;
+  }
+
+  stop() {
+    this.active = false;
+  }
+
+  update() {
+    if (this.active && this.remainingTime > 0) {
+      this.remainingTime--;
+      this.display();
+    } else if (this.remainingTime <= 0) {
+      this.stop();
+    }
+  }
+
+  display() {
+    push();
+    textAlign(CENTER, CENTER);
+    textSize(32);
+    fill(255, 0, 0); // Red fill
+    stroke(0); // Black outline
+    strokeWeight(4);
+
+    // Draw text multiple times at random positions for a creepy effect
+    for (let i = 0; i < 3; i++) {
+      let x = random(width / 2 - 50, width / 2 + 50);
+      let y = random(height / 2 - 50, height / 2 + 50);
+      text(this.message, x, y);
+    }
+    pop();
+  }
+}
+
+
+let date = new Date()
+let minutes = date.getMinutes();
+let hour = date.getHours();
+document.querySelector(".clock").innerHTML = hour+":"+minutes

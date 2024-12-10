@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title >Project B Website Draft</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style2.css">
+
+  <script src="lib/p5.js"></script>
+  <script src="lib/p5.sound.js"></script>
+</head>
+
+<body>
+
+  <div class="desktop">
+    <div class="icon-container">
+      <div class="icon">
+        <img src="assets/myComputerIcon.png" onclick="accessDenied()">
+        <p>My Computer</p>
+
+      </div>
+      <div class="icon">
+        <img src="assets/folderIcon.png" onclick="accessDenied()">
+        <p>Folder</p>
+
+      </div>
+      <div class="icon">
+        <img src="assets/recycleBinIcon.png" onclick="accessDenied()">
+        <p>Recycle Bin</p>
+
+      </div>
+
+      <div class="icon" onclick="canvasOpen()">
+        <img src="assets/msPaintIcon.png" >
+        <p >Paint</p>
+
+      </div>
+    </div>
+
+  <!-- the following div will contain the p5 canvas. -->
+  <div id="p5-canvas-container">
+    <!-- p5 canvas will be appended here. -->
+  </div>
+  
+  <div class="taskbar">
+    <div class="start-button">
+      <img src="assets/startButtonDefault.png">
+    </div>
+    <!-- <div class="taskbar-icons">
+      <div class="task-item">|</div>
+      <div class="task-item">|</div>
+    </div> -->
+
+    <div class="clock">11:30 AM</div>
+
+  </div>
+
+  </div>
+
+  <!-- the script tag below should always be at the bottom, right before the closing body tag -->
+  <script src="js/sketch.js"></script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+<!-- <div class="center-container">
+      <div id="p5-canvas-container">
+
+      </div>
+    </div> -->
