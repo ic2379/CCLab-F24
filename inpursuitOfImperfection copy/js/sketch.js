@@ -136,20 +136,80 @@ function canvasOpen() {
   }
 }
 
-function accessDenied() {
-  errorSound.play();
-  push();
-  imageMode(CENTER);
-  errorWindow.resize(200, 0);
-  image(errorWindow, random(height), random(width));
-  pop();
+let errorWindows = []; // Track all error windows
+
+class AccessDenied {
+  constructor() {
+    this.windowX = random(width); // Random x-coordinate
+    this.windowY = random(height); // Random y-coordinate
+    this.width = 200; // Width of the error window
+    this.height = 100; // Height of the error window
+
+    this.transparency = 255;
+    this.display(); // Display the error window immediately
+  }
+
+  display() {
+    errorSound.play(); // Play error sound
+
+    if (this.transparency === 0) return;
+    
+    // Draw the error window
+    push();
+    imageMode(CENTER);
+    errorWindow.resize(this.width, 0);
+    image(errorWindow, this.windowX, this.windowY);
+    pop();
+
+    // Add "Access Denied" text
+    push();
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    fill(255);
+    stroke(0);
+    strokeWeight(1.5);
+    text("Access Denied", this.windowX + 10, this.windowY - 10);
+    pop();
+
+    // Add "OK" button text
+    push();
+    fill(0);
+    noStroke();
+    textSize(15);
+    text("OK", this.windowX - 35, this.windowY + 33);
+    pop();
+
+    // Store button data for click detection
+    errorWindows.push({
+      x: this.windowX - 35 - 10, // Padding around the "OK" button
+      y: this.windowY + 33 - 10,
+      width: 60, // Approximate width of the "OK" button
+      height: 40,
+    });
+  }
 }
+
 
 function mouseClicked() {
   if (mouseX > 800 && mouseX < 822 &&
     mouseY > 8.9 && mouseY < 30 && backgroundTransparency != 0) {
     adjustStage();
   }
+
+  for (let i = 0; i < errorWindows.length; i++) {
+    let button = errorWindows[i];
+    if (
+      mouseX > button.x &&
+      mouseX < button.x + button.width &&
+      mouseY > button.y &&
+      mouseY < button.y + button.height
+    ) {
+      console.log("OK button clicked on window", i); // Handle "OK" click
+      errorWindows.splice(i, 1); // Remove the window from the array
+      return; // Stop checking after the first match
+    }
+  }
+
 }
 
 let date = new Date();
