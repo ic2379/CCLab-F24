@@ -121,7 +121,7 @@ function detectLineChange() {
     // normalize the angle difference to be between 0 and PI
     angleDifference = angleDifference > PI ? TWO_PI - angleDifference : angleDifference;
 
-    // threshold for a significant direction change (adjust as needed)
+    // threshold for a significant direction change
     let threshold = radians(45); // 45 degrees
 
     if (angleDifference > threshold) {
