@@ -14,6 +14,8 @@ let bg;
 let errorSound;
 let errorWindow; 
 
+let finalMessage;
+
 function preload() {
   bg = loadImage('assets/paintWindow1.png');
   errorSound = loadSound("assets/errorSound.mp3");
@@ -55,8 +57,16 @@ function draw() {
     for (line of lines) {
       line.display();
     }
+  }
 
+  if (!finalMessageStarted && millis() >= countTime) {
+    finalMessage.start();
+    finalMessageStarted = true; // Prevent starting the message again
+  }
 
+  // Continuously update the final message if it has started
+  if (finalMessageStarted) {
+    finalMessage.update();
   }
     
   // let s = "("+mouseX+", "+mouseY+")"
@@ -136,7 +146,12 @@ function canvasOpen() {
   }
 }
 
+let countTime; 
+let finalMessageStarted = false;
+
 function adjustStage() {
+
+  countTime = millis() +5000;
 
   // popup that goes to next step: finish popup & adjusting the drawing
 
@@ -184,34 +199,39 @@ function adjustStage() {
     pop();
   }
 
+
+  finalMessage = new FinalMsg("do you like it?", 300); // can adjust frames duration
+  
+  if (millis() >= countTime) {
+    finalMessage.start();
+  }
+
 }
 
 let errorWindows = [];
 
 class AccessDenied {
   constructor() {
-    this.windowX = random(width); // Random x-coordinate
-    this.windowY = random(height); // Random y-coordinate
-    this.width = 200; // Width of the error window
-    this.height = 100; // Height of the error window
+    this.windowX = random(width); 
+    this.windowY = random(height); 
+    this.width = 200; 
+    this.height = 100; 
 
     this.transparency = 255;
-    this.display(); // Display the error window immediately
+    this.display(); 
   }
 
   display() {
-    errorSound.play(); // Play error sound
+    errorSound.play(); 
 
     if (this.transparency === 0) return;
     
-    // Draw the error window
     push();
     imageMode(CENTER);
     errorWindow.resize(this.width, 0);
     image(errorWindow, this.windowX, this.windowY);
     pop();
 
-    // Add "Access Denied" text
     push();
     textAlign(CENTER, CENTER);
     textSize(16);
@@ -221,7 +241,7 @@ class AccessDenied {
     text("Access Denied", this.windowX + 10, this.windowY - 10);
     pop();
 
-    // Add "OK" button text
+    // "OK" text
     push();
     fill(0);
     noStroke();
@@ -229,11 +249,11 @@ class AccessDenied {
     text("OK", this.windowX - 45, this.windowY + 37);
     pop();
 
-    // Store button data for click detection
+    // button location for detect click 
     errorWindows.push({
-      x: this.windowX - 45 - 15, // Padding around the "OK" button
+      x: this.windowX - 45 - 15, 
       y: this.windowY + 37 - 15,
-      width: 60, // Approximate width of the "OK" button
+      width: 60, 
       height: 40,
     });
   }
@@ -246,26 +266,26 @@ function mouseClicked() {
   
     }
 
-    for (let i = 0; i < errorWindows.length; i++) {
-      let button = errorWindows[i];
-      if (
-        mouseX > button.x &&
-        mouseX < button.x + button.width &&
-        mouseY > button.y &&
-        mouseY < button.y + button.height
-      ) {
-        console.log("OK button clicked on window", i); // Handle "OK" click
-        errorWindows.splice(i, 1); // Remove the window from the array
-        return; // Stop checking after the first match
-      }
-    }
+    // for (let i = 0; i < errorWindows.length; i++) {
+    //   let button = errorWindows[i];
+    //   if (
+    //     mouseX > button.x &&
+    //     mouseX < button.x + button.width &&
+    //     mouseY > button.y &&
+    //     mouseY < button.y + button.height
+    //   ) {
+    //     console.log("OK button clicked on window", i); 
+    //     errorWindows.splice(i, 1); 
+    //     return; 
+    //   }
+    // }
 }
 
 class FinalMsg {
   constructor(message, duration) {
-    this.message = message; // The creepy message
-    this.duration = duration; // How long to display the message (in frames)
-    this.active = false; // Whether the creepy text is currently being displayed
+    this.message = message;
+    this.duration = duration;
+    this.active = false;
   }
 
   start() {
@@ -290,19 +310,20 @@ class FinalMsg {
     push();
     textAlign(CENTER, CENTER);
     textSize(32);
-    fill(255, 0, 0); // Red fill
-    stroke(0); // Black outline
+    fill(255, 0, 0); 
+    stroke(0);
     strokeWeight(4);
 
-    // Draw text multiple times at random positions for a creepy effect
+    // draw text multiple times at random positions
     for (let i = 0; i < 3; i++) {
-      let x = random(width / 2 - 50, width / 2 + 50);
-      let y = random(height / 2 - 50, height / 2 + 50);
+      let x = random(width);
+      let y = random(height);
       text(this.message, x, y);
     }
     pop();
   }
 }
+
 
 
 let date = new Date()
